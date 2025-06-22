@@ -1,0 +1,260 @@
+<html><head>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B600%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #4f46e5;--secondary-color: #f3f4f6;--text-primary: #1f2937;--text-secondary: #6b7280;--border-color: #e5e7eb;--success-bg: #d1fae5;--success-text: #065f46;--warning-bg: #fef3c7;--warning-text: #92400e;--pending-bg: #fee2e2;--pending-text: #991b1b;--danger-bg: #fee2e2;--danger-text: #991b1b;}
+      .material-icons {
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+</head>
+<body class="bg-slate-50">
+<div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+<div class="flex h-full grow">
+<div class="fixed top-0 left-0 flex h-screen w-72 flex-col border-r border-[var(--border-color)] bg-white p-6 shadow-sm">
+<div class="flex items-center gap-3 mb-8">
+<svg class="h-8 w-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.355a15.097 15.097 0 01-4.5 0m4.5 0V21m0-2.252a12.06 12.06 0 003.75 0m0 0V21m0-2.252c0-2.841-1.12-5.464-2.951-7.401S12.283 3 9.75 3M5.25 7.525c1.28.92 2.934 1.5 4.5 1.5s3.22-.58 4.5-1.5m0 0V3M5.25 3v4.525M3 12.75l3 1.75m15-1.75l-3 1.75M3 16.5l3 1.75m15-1.75l-3 1.75M9.75 21a3.75 3.75 0 110-7.5 3.75 3.75 0 010 7.5zm0-11.25a3.75 3.75 0 110-7.5 3.75 3.75 0 010 7.5z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<h1 class="text-xl font-semibold text-[var(--text-primary)]">Data Insights</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-lg bg-[var(--secondary-color)] px-4 py-3 text-[var(--primary-color)] transition-colors hover:bg-slate-200" href="#">
+<span class="material-icons">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-[var(--text-secondary)] transition-colors hover:bg-slate-100 hover:text-[var(--text-primary)]" href="#">
+<span class="material-icons">smart_toy</span>
+<span class="text-sm font-medium">Chat Agent</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-4 py-3 text-[var(--text-secondary)] transition-colors hover:bg-slate-100 hover:text-[var(--text-primary)]" href="#">
+<span class="material-icons">settings</span>
+<span class="text-sm font-medium">Account Settings</span>
+</a>
+</nav>
+<div class="mt-auto flex items-center gap-3 rounded-lg border border-[var(--border-color)] p-3">
+<img alt="User Avatar" class="h-10 w-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOcd2PQneGnvjzSPZcFlioYtm5dSWX4GKtZCJSnkhKjIdOEyRZbgeyr6hCor0kAnAHO4C__XW7gn-7pp8Ih2HbVik8J_ZFXF6--GcSZBTr89sJc1UiCkayAZiQrRSFs2wtRxGRPpi104ZBnewuaRpmx_-15O9Z99gn6xZ-mtJhXkWsUDPEDOomj66SFFtqCNNWe1vHQVu4Ed0JnEU71vRWc9Fy0cCE19aLTp9gJkM_pDZE7RRFygaG2S1y8CWf6UP4Dps0W0uIPvic"/>
+<div>
+<p class="text-sm font-medium text-[var(--text-primary)]">Olivia Martin</p>
+<p class="text-xs text-[var(--text-secondary)]">olivia.martin@example.com</p>
+</div>
+<button class="ml-auto text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+<span class="material-icons text-xl">logout</span>
+</button>
+</div>
+</div>
+<main class="ml-72 flex-1 p-8">
+<header class="mb-8">
+<h2 class="text-3xl font-bold tracking-tight text-[var(--text-primary)]">Dashboard</h2>
+</header>
+<section class="grid grid-cols-1 gap-6 md:grid-cols-3 mb-8">
+<div class="flex flex-col gap-2 rounded-xl border border-[var(--border-color)] bg-white p-6 shadow-sm">
+<p class="text-base font-medium text-[var(--text-secondary)]">Tasks in Progress</p>
+<p class="text-3xl font-bold text-[var(--text-primary)]">5</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl border border-[var(--border-color)] bg-white p-6 shadow-sm">
+<p class="text-base font-medium text-[var(--text-secondary)]">Reports Completed This Month</p>
+<p class="text-3xl font-bold text-[var(--text-primary)]">23</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl border border-[var(--border-color)] bg-white p-6 shadow-sm">
+<p class="text-base font-medium text-[var(--text-secondary)]">Total Data Sources Connected</p>
+<p class="text-3xl font-bold text-[var(--text-primary)]">8</p>
+</div>
+</section>
+<section class="mb-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-2xl font-semibold text-[var(--text-primary)]">My Data Sources</h3>
+<button class="flex items-center gap-2 rounded-lg bg-[var(--primary-color)] px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+<span class="material-icons text-lg">add</span>
+                Add Data Source
+              </button>
+</div>
+<div class="overflow-x-auto rounded-lg border border-[var(--border-color)] bg-white shadow-sm">
+<table class="min-w-full divide-y divide-[var(--border-color)]">
+<thead class="bg-slate-50">
+<tr>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Name</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Type</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Status</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Created</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[var(--border-color)] bg-white">
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Sales Data</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)] flex items-center gap-2">
+<span class="material-icons text-base text-green-500">description</span> CSV
+                    </td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+<circle cx="4" cy="4" r="3"></circle>
+</svg>
+                        Active
+                      </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-01-15</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-3" href="#">Edit</a>
+<a class="text-red-600 hover:text-red-800" href="#">Delete</a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Customer Feedback</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)] flex items-center gap-2">
+<span class="material-icons text-base text-blue-500">storage</span> PostgreSQL
+                    </td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+<circle cx="4" cy="4" r="3"></circle>
+</svg>
+                        Active
+                      </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-02-20</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-3" href="#">Edit</a>
+<a class="text-red-600 hover:text-red-800" href="#">Delete</a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Marketing Campaigns</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)] flex items-center gap-2">
+<span class="material-icons text-base text-purple-500">api</span> API
+                    </td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-red-400" fill="currentColor" viewBox="0 0 8 8">
+<circle cx="4" cy="4" r="3"></circle>
+</svg>
+                        Inactive
+                      </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-03-10</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-3" href="#">Edit</a>
+<a class="text-red-600 hover:text-red-800" href="#">Delete</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section>
+<h3 class="text-2xl font-semibold text-[var(--text-primary)] mb-4">Recent Report Tasks</h3>
+<div class="overflow-x-auto rounded-lg border border-[var(--border-color)] bg-white shadow-sm">
+<table class="min-w-full divide-y divide-[var(--border-color)]">
+<thead class="bg-slate-50">
+<tr>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Report Name</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Data Source</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Created</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Duration</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Status</th>
+<th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[var(--border-color)] bg-white">
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Monthly Sales Report</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">Sales Data</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-04-01</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">00:15:00</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-[var(--success-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--success-text)]">Completed</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">visibility</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">download</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">description</span></a>
+<a class="text-orange-500 hover:text-orange-700" href="#"><span class="material-icons text-base align-middle">refresh</span></a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Customer Satisfaction Analysis</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">Customer Feedback</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-04-02</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">00:20:00</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-[var(--warning-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--warning-text)]">Processing</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">visibility</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">download</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">description</span></a>
+<a class="text-orange-500 hover:text-orange-700" href="#"><span class="material-icons text-base align-middle">refresh</span></a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Q1 Marketing Performance</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">Marketing Campaigns</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-04-03</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">00:10:00</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-[var(--success-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--success-text)]">Completed</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">visibility</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">download</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">description</span></a>
+<a class="text-orange-500 hover:text-orange-700" href="#"><span class="material-icons text-base align-middle">refresh</span></a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Weekly Sales Update</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">Sales Data</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-04-04</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">00:05:00</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">Pending</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">visibility</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">download</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">description</span></a>
+<a class="text-orange-500 hover:text-orange-700" href="#"><span class="material-icons text-base align-middle">refresh</span></a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">Campaign ROI Analysis</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">Marketing Campaigns</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">2024-04-05</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">00:25:00</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-[var(--danger-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--danger-text)]">Failed</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">visibility</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">download</span></a>
+<a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2" href="#"><span class="material-icons text-base align-middle">description</span></a>
+<a class="text-orange-500 hover:text-orange-700" href="#"><span class="material-icons text-base align-middle">refresh</span></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</div>
+
+</body></html>
