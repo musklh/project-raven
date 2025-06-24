@@ -191,4 +191,132 @@
 
 请求成功，但没有返回内容。
 
+---
+
+## 5. Dashboard
+
+### 5.1 获取统计数据
+
+- **URL**: `/stats`
+- **Method**: `GET`
+- **Auth required**: Yes
+
+**成功响应 (200 OK)**
+```json
+[
+  { "label": "Tasks in Progress", "value": "5" },
+  { "label": "Reports Completed This Month", "value": "23" },
+  { "label": "Total Data Sources Connected", "value": "8" }
+]
+```
+
+### 5.2 获取数据源列表 (Dashboard)
+
+- **URL**: `/dashboard/datasources`
+- **Method**: `GET`
+- **Auth required**: Yes
+
+**成功响应 (200 OK)**
+```json
+[
+  {
+      "id": 1,
+      "name": "Sales Data",
+      "type": "CSV",
+      "status": "Active",
+      "created": "2024-01-15"
+  }
+]
+```
+
+### 5.3 添加数据源
+
+- **URL**: `/dashboard/datasources`
+- **Method**: `POST`
+- **Auth required**: Yes
+
+**请求体**
+```json
+{
+  "name": "New Marketing API",
+  "type": "API"
+}
+```
+
+**成功响应 (201 Created)**
+```json
+{
+  "id": 4,
+  "name": "New Marketing API",
+  "type": "API",
+  "typeIcon": "api",
+  "iconColor": "text-purple-500",
+  "status": "Active",
+  "statusColor": "bg-green-100 text-green-800",
+  "created": "2024-04-06"
+}
+```
+
+### 5.4 更新数据源
+
+- **URL**: `/dashboard/datasources/:id`
+- **Method**: `PUT`
+- **Auth required**: Yes
+
+**URL 参数**
+- `id` (number, required): 数据源的唯一标识符。
+
+**请求体**
+```json
+{
+  "name": "Sales Data (Archived)",
+  "type": "CSV",
+  "status": "Inactive"
+}
+```
+
+**成功响应 (200 OK)**
+```json
+{
+  "id": 1,
+  "name": "Sales Data (Archived)",
+  "type": "CSV",
+  "status": "Inactive",
+  "created": "2024-01-15"
+}
+```
+
+### 5.5 删除数据源
+
+- **URL**: `/dashboard/datasources/:id`
+- **Method**: `DELETE`
+- **Auth required**: Yes
+
+**URL 参数**
+- `id` (number, required): 数据源的唯一标识符。
+
+**成功响应 (204 No Content)**
+
+请求成功，但没有返回内容。
+
+### 5.6 获取报告任务列表
+
+- **URL**: `/reports`
+- **Method**: `GET`
+- **Auth required**: Yes
+
+**成功响应 (200 OK)**
+```json
+[
+  {
+    "id": 1,
+    "name": "Monthly Sales Report",
+    "dataSource": "Sales Data",
+    "created": "2024-04-01",
+    "duration": "00:15:00",
+    "status": "Completed"
+  }
+]
+```
+
 --- 

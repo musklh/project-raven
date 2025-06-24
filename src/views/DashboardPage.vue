@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// 统计数据
+// 响应式状态
 const stats = ref([])
-
-// 数据源列表
-const dataSources = ref([])
-
-// 报告任务列表
+const dataSources = ref<any[]>([])
 const reportTasks = ref([])
+const isModalOpen = ref(false)
+const modalError = ref('')
 
-onMounted(async () => {
+const initialDataSource = {
+  id: null,
+  name: '',
+  type: 'CSV',
+  status: 'Active'
+};
+let activeDataSource = reactive({ ...initialDataSource });
+
+
+// 数据获取
+const fetchDashboardData = async () => {
   try {
     const [statsRes, dataSourcesRes, reportsRes] = await Promise.all([
       fetch('/api/stats'),
@@ -30,11 +38,83 @@ onMounted(async () => {
     reportTasks.value = await reportsRes.json();
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
-    // Optionally, set an error state to show in the UI
   }
-});
+};
 
-// 导航到聊天页面
+onMounted(fetchDashboardData);
+
+// 模态框操作
+const openAddModal = () => {
+  Object.assign(activeDataSource, initialDataSource);
+  isModalOpen.value = true
+  modalError.value = ''
+}
+
+const openEditModal = (dataSource: any) => {
+  Object.assign(activeDataSource, dataSource);
+  isModalOpen.value = true
+  modalError.value = ''
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+}
+
+// CRUD 操作
+const saveDataSource = async () => {
+  if (!activeDataSource.name.trim()) {
+    modalError.value = 'Data source name is required.';
+    return;
+  }
+  
+  const isEditing = activeDataSource.id !== null;
+  const url = isEditing ? `/api/dashboard/datasources/${activeDataSource.id}` : '/api/dashboard/datasources';
+  const method = isEditing ? 'PUT' : 'POST';
+
+  // 为新数据源添加默认字段
+  const body = { ...activeDataSource };
+  if (!isEditing) {
+    body.created = new Date().toISOString().split('T')[0];
+    body.typeIcon = body.type === 'CSV' ? 'description' : (body.type === 'API' ? 'api' : 'storage');
+    body.iconColor = body.type === 'CSV' ? 'text-green-500' : (body.type === 'API' ? 'text-purple-500' : 'text-blue-500');
+    body.statusColor = body.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+  }
+
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to save data source');
+    }
+
+    await fetchDashboardData(); // 重新加载数据
+    closeModal();
+  } catch (error) {
+    console.error(error);
+    modalError.value = 'An error occurred while saving.';
+  }
+};
+
+const deleteDataSource = async (id: number) => {
+  if (window.confirm('Are you sure you want to delete this data source?')) {
+    try {
+      const response = await fetch(`/api/dashboard/datasources/${id}`, { method: 'DELETE' });
+      if (!response.ok) {
+        throw new Error('Failed to delete data source');
+      }
+      await fetchDashboardData(); // 重新加载数据
+    } catch (error) {
+      console.error(error);
+      alert('Failed to delete data source.');
+    }
+  }
+}
+
+// 导航
 const goToChat = () => {
   router.push('/chat')
 }
@@ -42,21 +122,6 @@ const goToChat = () => {
 // 注销
 const handleLogout = () => {
   router.push('/')
-}
-
-// 添加数据源
-const addDataSource = () => {
-  console.log('添加数据源')
-}
-
-// 编辑数据源
-const editDataSource = (id: number) => {
-  console.log('编辑数据源:', id)
-}
-
-// 删除数据源
-const deleteDataSource = (id: number) => {
-  console.log('删除数据源:', id)
 }
 
 // 报告操作
@@ -129,7 +194,7 @@ const refreshReport = (id: number) => {
           <section class="mb-8">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-2xl font-semibold text-[var(--text-primary)]">My Data Sources</h3>
-              <button @click="addDataSource" class="flex items-center gap-2 rounded-lg bg-[var(--primary-color)] px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <button @click="openAddModal" class="flex items-center gap-2 rounded-lg bg-[var(--primary-color)] px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 <span class="material-icons text-lg">add</span>
                 Add Data Source
               </button>
@@ -161,7 +226,7 @@ const refreshReport = (id: number) => {
                     </td>
                     <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ source.created }}</td>
                     <td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                      <a @click="editDataSource(source.id)" class="text-[var(--primary-color)] hover:text-indigo-800 mr-3 cursor-pointer">Edit</a>
+                      <a @click="openEditModal(source)" class="text-[var(--primary-color)] hover:text-indigo-800 mr-3 cursor-pointer">Edit</a>
                       <a @click="deleteDataSource(source.id)" class="text-red-600 hover:text-red-800 cursor-pointer">Delete</a>
                     </td>
                   </tr>
@@ -206,6 +271,44 @@ const refreshReport = (id: number) => {
             </div>
           </section>
         </main>
+      </div>
+    </div>
+
+    <!-- 数据源模态框 -->
+    <div v-if="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
+      <div class="relative w-full max-w-lg rounded-xl border border-slate-200 bg-white p-8 shadow-lg">
+        <h3 class="text-xl font-semibold text-slate-800 mb-6">{{ activeDataSource.id ? 'Edit' : 'Add' }} Data Source</h3>
+        
+        <form @submit.prevent="saveDataSource" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1" for="source-name">Name</label>
+            <input v-model="activeDataSource.name" id="source-name" type="text" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5" placeholder="e.g., Q1 Sales Data">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1" for="source-type">Type</label>
+            <select v-model="activeDataSource.type" id="source-type" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5">
+              <option>CSV</option>
+              <option>PostgreSQL</option>
+              <option>API</option>
+            </select>
+          </div>
+
+           <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1" for="source-status">Status</label>
+            <select v-model="activeDataSource.status" id="source-status" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5">
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+          </div>
+
+          <div v-if="modalError" class="text-sm text-red-600">{{ modalError }}</div>
+          
+          <div class="flex justify-end gap-4 pt-4">
+            <button @click="closeModal" type="button" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
+            <button type="submit" class="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

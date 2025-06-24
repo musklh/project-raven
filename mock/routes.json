@@ -6,6 +6,7 @@
   "/api/agents": "/agents",
   "/api/stats": "/stats",
   "/api/dashboard/datasources": "/dashboard_datasources",
+  "/api/dashboard/datasources/:id": "/dashboard_datasources/:id",
   "/api/reports": "/reports",
   "/api/login": "/login"
 } 
