@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -9,102 +9,79 @@ const currentMessage = ref('')
 const selectedDataSource = ref('')
 
 // 会话列表
-const conversations = ref([
-  {
-    id: 1,
-    title: 'Analyze sales data',
-    date: '2024-01-20',
-    active: false
-  },
-  {
-    id: 2,
-    title: 'Customer feedback analysis',
-    date: '2024-01-19',
-    active: true
-  }
-])
+const conversations = ref<any[]>([])
 
 // 聊天消息列表
-const messages = ref([
-  {
-    id: 1,
-    type: 'agent',
-    content: "Hello, I'm ready to assist with your data analysis. Please provide your instructions and select a data source.",
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA4n3DwFF_4CNdc8KTvA2uXnmTH-I7iEupK77SfzgVWYK6v-FjOSOhvjwEkGvqMN9B8r86A1Q-LF4YtROUFNBbWTtvCpBGN2DK3zy14M-iXKd9ou5NrsnOhjL8Qb6vSU3xNnmEfM5aRUyanRT44g-zl-AZjh8JUr9SsXWIYmXzPWm4KKzmR6Y8bagxnBuOGpO5-P2ub-KovZJqiPTtEUwfZm2mrz1tbfHs3Tg_gOYKxa2G35mcmStmYpeQjsIUKyDo9LryrblyB1-07'
-  },
-  {
-    id: 2,
-    type: 'user',
-    content: 'Analyze sales data for the last quarter.',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVUBlNg0ACI3inGKAOmj4WWYKHk5t7mFjgzcf0dHCWQqXjV8WGh4n8OUWp7k-qmDg_9hQYkAnPoBQNPlwY62pZ0-x0A9A_YxLKSOnVTVk4H03HrMDQ6S-Zo-i5tq7K3iMc8amMCGAn6XqOrZPHagqRVgmEQFswCtccKdsIVK6A0rQ137HDvnUo20YIbADYiXphdg0BBQoCV58Fnw5ZC_v9lJW5loaqlsWa61j2MNoulSsFivZPxKMQbU9c3sIKl5XpWRGiTqasBz8D'
-  },
-  {
-    id: 3,
-    type: 'agent',
-    content: `Here's the sales data analysis for the last quarter:
-
-**销售数据分析表格**
-
-| Product | Sales | Revenue |
-|---------|-------|---------|
-| Product A | 1000 | $50,000 |
-| Product B | 1500 | $75,000 |
-| Product C | 800 | $40,000 |
-
-**总计统计:**
-- Total Sales: 3300
-- Total Revenue: $165,000`,
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCtSYF8Yxc5_NrvJcw0ezjYV5rluO05Uo-y0cSf8LFtyeYvy8gjtzsVQZnse1lxKFtgwC_XAXUX93QBR_8J3ew6kwkaRubup5ZA2CM_9R879EM6ZzKCRZ77QfnHrl44ytByl-cjnJf8M4Yid4Gfue0PcnWLuVUT-FCi-uZHI0JizgRG7ySeosWL9RCUjZtPUJ0N412zAoCEdycYCX5FCJommYKM9dIz7PcXiu8NgTLOUk4zIcRAgZXq87QW59CVGjyHMXBmd4sTmKWK',
-    isTable: true
-  }
-])
+const messages = ref<any[]>([])
 
 // 数据源选项
-const dataSourceOptions = ref([
-  { value: '', label: 'Select Data Source (e.g., Sales Q4 2023)' },
-  { value: 'sales_q4_2023', label: 'Sales Q4 2023' },
-  { value: 'customer_feedback_jan', label: 'Customer Feedback Jan' },
-  { value: 'market_trends_report', label: 'Market Trends Report' }
-])
+const dataSourceOptions = ref<any[]>([])
 
 // Agent选项
-const agentOptions = ref([
-  {
-    id: 1,
-    name: 'Sales Analyst',
-    description: 'Analyzes sales data and provides insights.',
-    compatible: 'Sales Data, CRM Exports',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB0tsX4smz7Riiv0KuBo0i6NXSRKYEywD9FQHdO1zM2UpZSHAXlJB5OEvqhte8rnoNh7HKM7ZVZKoGVmNyhArUDVvsZvBedEggO2GPWa71t0b9Wd1GUJbXWBAKHp8j1qr6FCPNJQoPegqOiHeazan90M_EE6CBzLh5Js8j3_zX-hdXPrPvB_kOOuhL7GxBz4NjSA0GwbDc4XoKzK-dRgJH7p_XOsOOcpXWCQzvoWM-vZzt3uqkBx6Ufb8mHnaug5RBfyCi94qMb-R52',
-    selected: false
-  },
-  {
-    id: 2,
-    name: 'Customer Feedback Analyzer',
-    description: 'Analyzes customer feedback and identifies trends.',
-    compatible: 'Survey Results, Support Tickets',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCD2phqUzWJO9i-WQsmmB5cqNo55OXOa1jpVvpiTX-ebZlmIAb9dzL8rXZcVAPwZfIWFroKSVfzaEeIExsoz4IrYn7cb0hzTTJFClWAviNQDYQVFKwFRz8puqioHyEou4cm7DiA1NGm2lZ7sqXbykyWeV2RAe3V-wjNcUn6L0-dBCSIHrO2Rf8BnM2kZAjKysgGi9Ij8cyTqRB_XRuuEf6xo4B6BENJbPWXAz0VYvFvlKPKdGCDGZNCFEIAqUlTx4M5NqtzZ3tWXuhP',
-    selected: true
+const agentOptions = ref<any[]>([])
+
+const activeConversationId = ref<number | null>(null);
+
+const fetchConversations = async () => {
+  const response = await fetch('/api/conversations')
+  conversations.value = await response.json()
+  if (conversations.value.length > 0) {
+    const activeConv = conversations.value.find(c => c.active) || conversations.value[0];
+    await switchConversation(activeConv.id);
   }
-])
+}
+
+const fetchMessages = async (conversationId: number) => {
+  const response = await fetch(`/api/conversations/${conversationId}/messages`)
+  messages.value = await response.json()
+}
+
+const fetchDataSourceOptions = async () => {
+  const response = await fetch('/api/datasources')
+  dataSourceOptions.value = await response.json()
+}
+
+const fetchAgentOptions = async () => {
+  const response = await fetch('/api/agents')
+  agentOptions.value = await response.json()
+}
 
 // 切换会话
-const switchConversation = (id: number) => {
+const switchConversation = async (id: number) => {
+  activeConversationId.value = id;
   conversations.value.forEach(conv => {
     conv.active = conv.id === id
   })
+  await fetchMessages(id);
 }
 
 // 发送消息
-const sendMessage = () => {
-  if (!currentMessage.value.trim()) return
+const sendMessage = async () => {
+  if (!currentMessage.value.trim() || !activeConversationId.value) return
   
-  // 添加用户消息
-  messages.value.push({
-    id: messages.value.length + 1,
+  const userMessage = {
     type: 'user',
     content: currentMessage.value,
     avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVUBlNg0ACI3inGKAOmj4WWYKHk5t7mFjgzcf0dHCWQqXjV8WGh4n8OUWp7k-qmDg_9hQYkAnPoBQNPlwY62pZ0-x0A9A_YxLKSOnVTVk4H03HrMDQ6S-Zo-i5tq7K3iMc8amMCGAn6XqOrZPHagqRVgmEQFswCtccKdsIVK6A0rQ137HDvnUo20YIbADYiXphdg0BBQoCV58Fnw5ZC_v9lJW5loaqlsWa61j2MNoulSsFivZPxKMQbU9c3sIKl5XpWRGiTqasBz8D'
+  };
+
+  messages.value.push({
+      id: messages.value.length + 1,
+      ...userMessage
+  });
+
+  const response = await fetch(`/api/conversations/${activeConversationId.value}/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 
+      content: currentMessage.value,
+      dataSource: selectedDataSource.value
+    })
   })
+
+  const agentResponse = await response.json();
   
   // 清空输入框
   currentMessage.value = ''
@@ -113,19 +90,29 @@ const sendMessage = () => {
   setTimeout(() => {
     messages.value.push({
       id: messages.value.length + 1,
-      type: 'agent',
-      content: '我已收到您的请求，正在分析数据...',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCtSYF8Yxc5_NrvJcw0ezjYV5rluO05Uo-y0cSf8LFtyeYvy8gjtzsVQZnse1lxKFtgwC_XAXUX93QBR_8J3ew6kwkaRubup5ZA2CM_9R879EM6ZzKCRZ77QfnHrl44ytByl-cjnJf8M4Yid4Gfue0PcnWLuVUT-FCi-uZHI0JizgRG7ySeosWL9RCUjZtPUJ0N412zAoCEdycYCX5FCJommYKM9dIz7PcXiu8NgTLOUk4zIcRAgZXq87QW59CVGjyHMXBmd4sTmKWK'
+      ...agentResponse
     })
   }, 1000)
 }
 
 // 选择Agent
-const selectAgent = (id: number) => {
+const selectAgent = async (id: number) => {
   agentOptions.value.forEach(agent => {
     agent.selected = agent.id === id
   })
+  // 可以在这里增加API调用来通知后端Agent的选择
+  // await fetch(`/api/conversations/${activeConversationId.value}/agent`, {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({ agentId: id })
+  // });
 }
+
+onMounted(async () => {
+  await fetchConversations();
+  await fetchDataSourceOptions();
+  await fetchAgentOptions();
+});
 
 // 返回Dashboard
 const goToDashboard = () => {
