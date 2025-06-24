@@ -348,14 +348,35 @@ const handleLogout = () => {
             </select>
           </div>
 
-          <div v-if="modalError" class="text-sm text-red-600">{{ modalError }}</div>
+          <div v-if="dataSourceModalError" class="text-sm text-red-600">{{ dataSourceModalError }}</div>
           
           <div class="flex justify-end gap-4 pt-4">
-            <button @click="closeModal" type="button" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
+            <button @click="closeDataSourceModal" type="button" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
             <button type="submit" class="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
           </div>
         </form>
       </div>
+    </div>
+
+    <!-- 报告详情模态框 -->
+    <div v-if="isReportModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" @click.self="closeReportModal">
+        <div class="relative w-full max-w-3xl rounded-xl bg-white shadow-lg flex flex-col" style="max-height: 90vh;">
+            <div class="flex items-center justify-between p-6 border-b border-slate-200">
+                <h3 class="text-xl font-semibold text-slate-800">{{ activeReport?.name }}</h3>
+                <button @click="closeReportModal" class="text-slate-500 hover:text-slate-800">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+              <article class="prose prose-slate max-w-none" v-html="reportContentHtml"></article>
+            </div>
+             <div class="flex justify-end p-4 bg-slate-50 border-t border-slate-200 rounded-b-xl">
+                <button @click="downloadReport(activeReport)" class="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <span class="material-icons text-base">download</span>
+                    Download Report
+                </button>
+            </div>
+        </div>
     </div>
   </div>
 </template>
@@ -391,5 +412,20 @@ const handleLogout = () => {
   word-wrap: normal;
   direction: ltr;
   -webkit-font-smoothing: antialiased;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1rem;
+}
+
+.prose thead {
+  background-color: #f3f4f6;
 }
 </style>

@@ -107,16 +107,6 @@
       "created": "2024-02-20"
     },
     {
-      "id": 3,
-      "name": "Marketing Campaigns",
-      "type": "API",
-      "typeIcon": "api",
-      "iconColor": "text-purple-500",
-      "status": "Inactive",
-      "statusColor": "bg-red-100 text-red-800",
-      "created": "2024-03-10"
-    },
-    {
       "id": 4,
       "name": "sd",
       "type": "CSV",
@@ -132,7 +122,7 @@
       "id": 1,
       "name": "Monthly Sales Report",
       "dataSource": "Sales Data",
-      "created": "2024-04-01",
+      "created": "2025-06-24",
       "duration": "00:15:00",
       "status": "Completed",
       "statusColor": "bg-[var(--success-bg)] text-[var(--success-text)]",
@@ -172,10 +162,10 @@
       "id": 5,
       "name": "Campaign ROI Analysis",
       "dataSource": "Marketing Campaigns",
-      "created": "2024-04-05",
+      "created": "2025-06-24",
       "duration": "00:25:00",
-      "status": "Failed",
-      "statusColor": "bg-[var(--danger-bg)] text-[var(--danger-text)]",
+      "status": "Completed",
+      "statusColor": "bg-[var(--success-bg)] text-[var(--success-text)]",
       "content": "### Campaign ROI Analysis\n\n**Error:** Failed to connect to marketing data source. Please check credentials and try again."
     }
   ]
