@@ -8,5 +8,6 @@
   "/api/dashboard/datasources": "/dashboard_datasources",
   "/api/dashboard/datasources/:id": "/dashboard_datasources/:id",
   "/api/reports": "/reports",
+  "/api/reports/:id": "/reports/:id",
   "/api/login": "/login"
 } 
