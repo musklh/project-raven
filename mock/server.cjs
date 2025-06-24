@@ -28,6 +28,36 @@ server.post('/api/login', (req, res) => {
   }
 })
 
+// Custom route for refreshing a report
+server.post('/api/reports/:id/refresh', (req, res) => {
+  const { id } = req.params;
+  const db = router.db; // lowdb instance
+  const report = db.get('reports').find({ id: parseInt(id) }).value();
+
+  if (report) {
+    // Simulate processing
+    db.get('reports')
+      .find({ id: parseInt(id) })
+      .assign({ status: 'Processing', statusColor: 'bg-[var(--warning-bg)] text-[var(--warning-text)]' })
+      .write();
+    
+    // After a delay, set it back to completed
+    setTimeout(() => {
+      db.get('reports')
+        .find({ id: parseInt(id) })
+        .assign({ 
+            status: 'Completed', 
+            statusColor: 'bg-[var(--success-bg)] text-[var(--success-text)]',
+            created: new Date().toISOString().split('T')[0]
+        })
+        .write();
+    }, 3000);
+
+    res.status(202).json({ message: 'Report refresh initiated.' });
+  } else {
+    res.status(404).json({ message: 'Report not found' });
+  }
+});
 
 // Use default router and custom routes
 server.use(jsonServer.rewriter(customRoutes))

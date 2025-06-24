@@ -72,9 +72,18 @@
     }
   ],
   "stats": [
-    { "label": "Tasks in Progress", "value": "5" },
-    { "label": "Reports Completed This Month", "value": "23" },
-    { "label": "Total Data Sources Connected", "value": "8" }
+    {
+      "label": "Tasks in Progress",
+      "value": "5"
+    },
+    {
+      "label": "Reports Completed This Month",
+      "value": "23"
+    },
+    {
+      "label": "Total Data Sources Connected",
+      "value": "8"
+    }
   ],
   "dashboard_datasources": [
     {
@@ -106,6 +115,16 @@
       "status": "Inactive",
       "statusColor": "bg-red-100 text-red-800",
       "created": "2024-03-10"
+    },
+    {
+      "id": 4,
+      "name": "sd",
+      "type": "CSV",
+      "status": "Active",
+      "created": "2025-06-24",
+      "typeIcon": "description",
+      "iconColor": "text-green-500",
+      "statusColor": "bg-green-100 text-green-800"
     }
   ],
   "reports": [
@@ -116,7 +135,8 @@
       "created": "2024-04-01",
       "duration": "00:15:00",
       "status": "Completed",
-      "statusColor": "bg-[var(--success-bg)] text-[var(--success-text)]"
+      "statusColor": "bg-[var(--success-bg)] text-[var(--success-text)]",
+      "content": "### Monthly Sales Report\n\n**Summary:** A strong month with significant growth in key product areas.\n\n| Product | Units Sold | Revenue |\n|---|---|---|\n| Product A | 1200 | $60,000 |\n| Product B | 850 | $63,750 |\n| Product C | 400 | $20,000 |"
     },
     {
       "id": 2,
@@ -125,7 +145,8 @@
       "created": "2024-04-02",
       "duration": "00:20:00",
       "status": "Processing",
-      "statusColor": "bg-[var(--warning-bg)] text-[var(--warning-text)]"
+      "statusColor": "bg-[var(--warning-bg)] text-[var(--warning-text)]",
+      "content": "### Customer Satisfaction Analysis\n\n**Summary:** Analysis is currently in progress. Preliminary data suggests a positive trend in customer sentiment.\n"
     },
     {
       "id": 3,
@@ -134,7 +155,8 @@
       "created": "2024-04-03",
       "duration": "00:10:00",
       "status": "Completed",
-      "statusColor": "bg-[var(--success-bg)] text-[var(--success-text)]"
+      "statusColor": "bg-[var(--success-bg)] text-[var(--success-text)]",
+      "content": "### Q1 Marketing Performance\n\n**Summary:** The 'Spring Sale' campaign exceeded all targets, driving a 25% increase in lead generation.\n\n| Campaign | Clicks | Conversions | ROI |\n|---|---|---|---|\n| Spring Sale | 250,000 | 5,000 | 250% |\n| Social Media Push | 120,000 | 1,200 | 150% |"
     },
     {
       "id": 4,
@@ -143,7 +165,8 @@
       "created": "2024-04-04",
       "duration": "00:05:00",
       "status": "Pending",
-      "statusColor": "bg-blue-100 text-blue-800"
+      "statusColor": "bg-blue-100 text-blue-800",
+      "content": "### Weekly Sales Update\n\n**Summary:** This report is scheduled to run at the end of the day."
     },
     {
       "id": 5,
@@ -152,7 +175,8 @@
       "created": "2024-04-05",
       "duration": "00:25:00",
       "status": "Failed",
-      "statusColor": "bg-[var(--danger-bg)] text-[var(--danger-text)]"
+      "statusColor": "bg-[var(--danger-bg)] text-[var(--danger-text)]",
+      "content": "### Campaign ROI Analysis\n\n**Error:** Failed to connect to marketing data source. Please check credentials and try again."
     }
   ]
-} 
+}

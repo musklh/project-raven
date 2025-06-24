@@ -319,4 +319,33 @@
 ]
 ```
 
+### 5.7 获取单个报告任务
+
+- **URL**: `/reports/:id`
+- **Method**: `GET`
+- **Auth required**: Yes
+
+**成功响应 (200 OK)**
+```json
+{
+  "id": 1,
+  "name": "Monthly Sales Report",
+  "dataSource": "Sales Data",
+  "created": "2024-04-01",
+  "duration": "00:15:00",
+  "status": "Completed",
+  "content": "### Monthly Sales Report\n\n| Product | Units Sold | Revenue |\n|---|---|---|\n| Widget A | 500 | $10,000 |\n| Widget B | 300 | $15,000 |"
+}
+```
+
+### 5.8 刷新报告任务
+
+- **URL**: `/reports/:id/refresh`
+- **Method**: `POST`
+- **Auth required**: Yes
+
+**成功响应 (202 Accepted)**
+
+服务器已接受请求进行处理。客户端可以轮询报告任务的状态来查看更新。
+
 --- 

@@ -1,24 +1,30 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { marked } from 'marked'
 
 const router = useRouter()
 
 // 响应式状态
 const stats = ref([])
 const dataSources = ref<any[]>([])
-const reportTasks = ref([])
-const isModalOpen = ref(false)
-const modalError = ref('')
+const reportTasks = ref<any[]>([])
 
-const initialDataSource = {
-  id: null,
-  name: '',
-  type: 'CSV',
-  status: 'Active'
-};
+// 数据源模态框
+const isDataSourceModalOpen = ref(false)
+const dataSourceModalError = ref('')
+const initialDataSource = { id: null, name: '', type: 'CSV', status: 'Active' };
 let activeDataSource = reactive({ ...initialDataSource });
 
+// 报告模态框
+const isReportModalOpen = ref(false)
+const activeReport = ref<any>(null)
+const reportContentHtml = computed(() => {
+  if (activeReport.value && activeReport.value.content) {
+    return marked(activeReport.value.content);
+  }
+  return '';
+});
 
 // 数据获取
 const fetchDashboardData = async () => {
@@ -43,27 +49,27 @@ const fetchDashboardData = async () => {
 
 onMounted(fetchDashboardData);
 
-// 模态框操作
+// 数据源模态框操作
 const openAddModal = () => {
   Object.assign(activeDataSource, initialDataSource);
-  isModalOpen.value = true
-  modalError.value = ''
+  isDataSourceModalOpen.value = true
+  dataSourceModalError.value = ''
 }
 
 const openEditModal = (dataSource: any) => {
   Object.assign(activeDataSource, dataSource);
-  isModalOpen.value = true
-  modalError.value = ''
+  isDataSourceModalOpen.value = true
+  dataSourceModalError.value = ''
 }
 
-const closeModal = () => {
-  isModalOpen.value = false
+const closeDataSourceModal = () => {
+  isDataSourceModalOpen.value = false
 }
 
 // CRUD 操作
 const saveDataSource = async () => {
   if (!activeDataSource.name.trim()) {
-    modalError.value = 'Data source name is required.';
+    dataSourceModalError.value = 'Data source name is required.';
     return;
   }
   
@@ -71,7 +77,6 @@ const saveDataSource = async () => {
   const url = isEditing ? `/api/dashboard/datasources/${activeDataSource.id}` : '/api/dashboard/datasources';
   const method = isEditing ? 'PUT' : 'POST';
 
-  // 为新数据源添加默认字段
   const body = { ...activeDataSource };
   if (!isEditing) {
     body.created = new Date().toISOString().split('T')[0];
@@ -91,11 +96,11 @@ const saveDataSource = async () => {
       throw new Error('Failed to save data source');
     }
 
-    await fetchDashboardData(); // 重新加载数据
-    closeModal();
+    await fetchDashboardData();
+    closeDataSourceModal();
   } catch (error) {
     console.error(error);
-    modalError.value = 'An error occurred while saving.';
+    dataSourceModalError.value = 'An error occurred while saving.';
   }
 };
 
@@ -114,6 +119,59 @@ const deleteDataSource = async (id: number) => {
   }
 }
 
+// 报告操作
+const viewReport = async (id: number) => {
+  try {
+    const response = await fetch(`/api/reports/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch report details.');
+    activeReport.value = await response.json();
+    isReportModalOpen.value = true;
+  } catch (error) {
+    console.error(error);
+    alert('Could not load report details.');
+  }
+}
+
+const downloadReport = (report: any) => {
+  const blob = new Blob([report.content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${report.name.replace(/\s/g, '_')}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+const refreshReport = async (id: number) => {
+  try {
+    const response = await fetch(`/api/reports/${id}/refresh`, { method: 'POST' });
+    if (!response.ok) throw new Error('Failed to start refresh.');
+    
+    // Optimistically update the UI
+    const task = reportTasks.value.find(t => t.id === id);
+    if (task) {
+      task.status = 'Processing';
+      task.statusColor = 'bg-[var(--warning-bg)] text-[var(--warning-text)]';
+    }
+
+    // Poll for completion
+    setTimeout(() => {
+        fetchDashboardData()
+    }, 3500);
+
+  } catch (error) {
+    console.error(error);
+    alert('Failed to refresh report.');
+  }
+}
+
+const closeReportModal = () => {
+    isReportModalOpen.value = false;
+    activeReport.value = null;
+}
+
 // 导航
 const goToChat = () => {
   router.push('/chat')
@@ -122,19 +180,6 @@ const goToChat = () => {
 // 注销
 const handleLogout = () => {
   router.push('/')
-}
-
-// 报告操作
-const viewReport = (id: number) => {
-  console.log('查看报告:', id)
-}
-
-const downloadReport = (id: number) => {
-  console.log('下载报告:', id)
-}
-
-const refreshReport = (id: number) => {
-  console.log('刷新报告:', id)
 }
 </script>
 
@@ -257,13 +302,14 @@ const refreshReport = (id: number) => {
                     <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.created }}</td>
                     <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.duration }}</td>
                     <td class="whitespace-nowrap px-6 py-4">
-                      <span :class="['inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', task.statusColor]">{{ task.status }}</span>
+                      <span :class="['inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', task.statusColor]">
+                        {{ task.status }}
+                      </span>
                     </td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                      <a @click="viewReport(task.id)" class="text-[var(--primary-color)] hover:text-indigo-800 mr-2 cursor-pointer"><span class="material-icons text-base align-middle">visibility</span></a>
-                      <a @click="downloadReport(task.id)" class="text-[var(--primary-color)] hover:text-indigo-800 mr-2 cursor-pointer"><span class="material-icons text-base align-middle">download</span></a>
-                      <a class="text-[var(--primary-color)] hover:text-indigo-800 mr-2 cursor-pointer"><span class="material-icons text-base align-middle">description</span></a>
-                      <a @click="refreshReport(task.id)" class="text-orange-500 hover:text-orange-700 cursor-pointer"><span class="material-icons text-base align-middle">refresh</span></a>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium flex items-center gap-2">
+                      <button @click="viewReport(task.id)" class="text-indigo-600 hover:text-indigo-800" title="View Report"><span class="material-icons text-base">visibility</span></button>
+                      <button @click="downloadReport(task)" class="text-green-600 hover:text-green-800" title="Download Report"><span class="material-icons text-base">download</span></button>
+                      <button @click="refreshReport(task.id)" class="text-blue-600 hover:text-blue-800" title="Refresh Report"><span class="material-icons text-base">refresh</span></button>
                     </td>
                   </tr>
                 </tbody>
@@ -275,7 +321,7 @@ const refreshReport = (id: number) => {
     </div>
 
     <!-- 数据源模态框 -->
-    <div v-if="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
+    <div v-if="isDataSourceModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
       <div class="relative w-full max-w-lg rounded-xl border border-slate-200 bg-white p-8 shadow-lg">
         <h3 class="text-xl font-semibold text-slate-800 mb-6">{{ activeDataSource.id ? 'Edit' : 'Add' }} Data Source</h3>
         
