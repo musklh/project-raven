@@ -7,13 +7,37 @@ const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
 const activeTab = ref('login')
+const error = ref('')
 
 // 处理登录
-const handleLogin = () => {
-  // 这里可以添加实际的登录逻辑
-  console.log('登录逻辑', { email: email.value, password: password.value, rememberMe: rememberMe.value })
-  // 登录成功后跳转到仪表板
-  router.push('/dashboard')
+const handleLogin = async () => {
+  error.value = ''
+  try {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Login failed');
+    }
+
+    const data = await response.json();
+    console.log('Login successful, token:', data.token);
+    
+    // 登录成功后跳转到仪表板
+    router.push('/dashboard')
+  } catch (err: any) {
+    error.value = err.message;
+    console.error('Login error:', err);
+  }
 }
 
 // 切换标签页
@@ -94,6 +118,9 @@ const switchTab = (tab: string) => {
                   >
                     <span class="truncate">Login</span>
                   </button>
+                </div>
+                <div v-if="error" class="text-red-500 text-sm text-center pt-2">
+                  {{ error }}
                 </div>
               </div>
               
