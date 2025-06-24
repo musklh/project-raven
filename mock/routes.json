@@ -1,0 +1,7 @@
+{
+  "/api/conversations": "/conversations",
+  "/api/conversations/:id": "/conversations/:id",
+  "/api/conversations/:conversationId/messages": "/messages?conversationId=:conversationId",
+  "/api/datasources": "/datasources",
+  "/api/agents": "/agents"
+} 

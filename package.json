@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "mock:api": "json-server --watch mock/db.json --routes mock/routes.json --port 3001"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
@@ -17,6 +18,7 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
     "autoprefixer": "^10.4.21",
+    "json-server": "^0.17.4",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.10",
     "typescript": "~5.8.3",
