@@ -3,5 +3,8 @@
   "/api/conversations/:id": "/conversations/:id",
   "/api/conversations/:conversationId/messages": "/messages?conversationId=:conversationId",
   "/api/datasources": "/datasources",
-  "/api/agents": "/agents"
+  "/api/agents": "/agents",
+  "/api/stats": "/stats",
+  "/api/dashboard/datasources": "/dashboard_datasources",
+  "/api/reports": "/reports"
 } 

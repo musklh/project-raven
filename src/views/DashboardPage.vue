@@ -1,98 +1,38 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 // 统计数据
-const stats = ref([
-  { label: 'Tasks in Progress', value: '5' },
-  { label: 'Reports Completed This Month', value: '23' },
-  { label: 'Total Data Sources Connected', value: '8' }
-])
+const stats = ref([])
 
 // 数据源列表
-const dataSources = ref([
-  {
-    id: 1,
-    name: 'Sales Data',
-    type: 'CSV',
-    typeIcon: 'description',
-    iconColor: 'text-green-500',
-    status: 'Active',
-    statusColor: 'bg-green-100 text-green-800',
-    created: '2024-01-15'
-  },
-  {
-    id: 2,
-    name: 'Customer Feedback',
-    type: 'PostgreSQL',
-    typeIcon: 'storage',
-    iconColor: 'text-blue-500',
-    status: 'Active',
-    statusColor: 'bg-green-100 text-green-800',
-    created: '2024-02-20'
-  },
-  {
-    id: 3,
-    name: 'Marketing Campaigns',
-    type: 'API',
-    typeIcon: 'api',
-    iconColor: 'text-purple-500',
-    status: 'Inactive',
-    statusColor: 'bg-red-100 text-red-800',
-    created: '2024-03-10'
-  }
-])
+const dataSources = ref([])
 
 // 报告任务列表
-const reportTasks = ref([
-  {
-    id: 1,
-    name: 'Monthly Sales Report',
-    dataSource: 'Sales Data',
-    created: '2024-04-01',
-    duration: '00:15:00',
-    status: 'Completed',
-    statusColor: 'bg-[var(--success-bg)] text-[var(--success-text)]'
-  },
-  {
-    id: 2,
-    name: 'Customer Satisfaction Analysis',
-    dataSource: 'Customer Feedback',
-    created: '2024-04-02',
-    duration: '00:20:00',
-    status: 'Processing',
-    statusColor: 'bg-[var(--warning-bg)] text-[var(--warning-text)]'
-  },
-  {
-    id: 3,
-    name: 'Q1 Marketing Performance',
-    dataSource: 'Marketing Campaigns',
-    created: '2024-04-03',
-    duration: '00:10:00',
-    status: 'Completed',
-    statusColor: 'bg-[var(--success-bg)] text-[var(--success-text)]'
-  },
-  {
-    id: 4,
-    name: 'Weekly Sales Update',
-    dataSource: 'Sales Data',
-    created: '2024-04-04',
-    duration: '00:05:00',
-    status: 'Pending',
-    statusColor: 'bg-blue-100 text-blue-800'
-  },
-  {
-    id: 5,
-    name: 'Campaign ROI Analysis',
-    dataSource: 'Marketing Campaigns',
-    created: '2024-04-05',
-    duration: '00:25:00',
-    status: 'Failed',
-    statusColor: 'bg-[var(--danger-bg)] text-[var(--danger-text)]'
+const reportTasks = ref([])
+
+onMounted(async () => {
+  try {
+    const [statsRes, dataSourcesRes, reportsRes] = await Promise.all([
+      fetch('/api/stats'),
+      fetch('/api/dashboard/datasources'),
+      fetch('/api/reports')
+    ]);
+
+    if (!statsRes.ok || !dataSourcesRes.ok || !reportsRes.ok) {
+        throw new Error('Failed to fetch dashboard data');
+    }
+
+    stats.value = await statsRes.json();
+    dataSources.value = await dataSourcesRes.json();
+    reportTasks.value = await reportsRes.json();
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+    // Optionally, set an error state to show in the UI
   }
-])
+});
 
 // 导航到聊天页面
 const goToChat = () => {
