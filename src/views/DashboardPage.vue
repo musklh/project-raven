@@ -92,7 +92,7 @@ const saveDataSource = async () => {
     body.created = new Date().toISOString().split('T')[0];
     body.typeIcon = body.type === 'CSV' ? 'description' : (body.type === 'API' ? 'api' : 'storage');
     body.iconColor = body.type === 'CSV' ? 'text-green-500' : (body.type === 'API' ? 'text-purple-500' : 'text-blue-500');
-    body.statusColor = body.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                        body.statusColor = body.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
   }
 
   try {
