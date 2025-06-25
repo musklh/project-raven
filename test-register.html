@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试注册API</title>
+</head>
+<body>
+    <h1>注册API测试</h1>
+    
+    <div style="margin-bottom: 20px;">
+        <h3>测试注册新用户</h3>
+        <div>
+            <label>姓名: <input type="text" id="name" value="张三" /></label><br><br>
+            <label>邮箱: <input type="email" id="email" value="test-user@example.com" /></label><br><br>
+            <label>密码: <input type="password" id="password" value="123456" /></label><br><br>
+            <button onclick="testRegister()">测试注册</button>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <h3>测试重复邮箱注册</h3>
+        <button onclick="testDuplicateEmail()">测试重复邮箱注册</button>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        async function testRegister() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const response = await fetch('http://localhost:8080/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 style="color: green;">注册成功!</h3>
+                        <p>消息: ${data.message}</p>
+                        <p>用户ID: ${data.userId}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 style="color: red;">注册失败!</h3>
+                        <p>错误: ${data.message}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 style="color: red;">请求错误!</h3>
+                    <p>错误: ${error.message}</p>
+                `;
+            }
+        }
+
+        async function testDuplicateEmail() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const response = await fetch('http://localhost:8080/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: '重复用户',
+                        email: 'default@example.com', // 使用已存在的邮箱
+                        password: '123456'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 style="color: green;">注册成功!</h3>
+                        <p>消息: ${data.message}</p>
+                        <p>用户ID: ${data.userId}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 style="color: orange;">预期的错误!</h3>
+                        <p>错误: ${data.message}</p>
+                        <p>这是正确的行为，因为邮箱已存在。</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 style="color: red;">请求错误!</h3>
+                    <p>错误: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html> 
