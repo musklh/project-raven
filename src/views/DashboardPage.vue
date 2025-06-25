@@ -6,14 +6,24 @@ import { marked } from 'marked'
 const router = useRouter()
 
 // 响应式状态
-const stats = ref([])
+const stats = ref<any[]>([])
 const dataSources = ref<any[]>([])
 const reportTasks = ref<any[]>([])
 
 // 数据源模态框
 const isDataSourceModalOpen = ref(false)
 const dataSourceModalError = ref('')
-const initialDataSource = { id: null, name: '', type: 'CSV', status: 'Active' };
+const initialDataSource = { 
+  id: null as number | null, 
+  name: '', 
+  type: 'CSV', 
+  status: 'Active',
+  created: '',
+  typeIcon: '',
+  iconColor: '',
+  statusColor: '',
+  description: ''
+};
 let activeDataSource = reactive({ ...initialDataSource });
 
 // 报告模态框
@@ -77,12 +87,12 @@ const saveDataSource = async () => {
   const url = isEditing ? `/api/dashboard/datasources/${activeDataSource.id}` : '/api/dashboard/datasources';
   const method = isEditing ? 'PUT' : 'POST';
 
-  const body = { ...activeDataSource };
+  const body: any = { ...activeDataSource };
   if (!isEditing) {
     body.created = new Date().toISOString().split('T')[0];
     body.typeIcon = body.type === 'CSV' ? 'description' : (body.type === 'API' ? 'api' : 'storage');
     body.iconColor = body.type === 'CSV' ? 'text-green-500' : (body.type === 'API' ? 'text-purple-500' : 'text-blue-500');
-    body.statusColor = body.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+    body.statusColor = body.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
   }
 
   try {
@@ -282,7 +292,13 @@ const handleLogout = () => {
 
           <!-- 报告任务管理 -->
           <section>
-            <h3 class="text-2xl font-semibold text-[var(--text-primary)] mb-4">Recent Report Tasks</h3>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-2xl font-semibold text-[var(--text-primary)]">Recent Report Tasks</h3>
+              <button @click="$router.push('/generate-report')" class="flex items-center gap-2 rounded-lg bg-[var(--primary-color)] px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <span class="material-icons text-lg">add_box</span>
+                Generate Report
+              </button>
+            </div>
             <div class="overflow-x-auto rounded-lg border border-[var(--border-color)] bg-white shadow-sm">
               <table class="min-w-full divide-y divide-[var(--border-color)]">
                 <thead class="bg-slate-50">
