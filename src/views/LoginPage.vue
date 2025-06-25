@@ -3,9 +3,15 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+// 登录相关
 const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
+// 注册相关
+const registerName = ref('')
+const registerEmail = ref('')
+const registerPassword = ref('')
+// 通用
 const activeTab = ref('login')
 const error = ref('')
 
@@ -40,9 +46,49 @@ const handleLogin = async () => {
   }
 }
 
+// 处理注册
+const handleRegister = async () => {
+  error.value = ''
+  try {
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: registerName.value,
+        email: registerEmail.value,
+        password: registerPassword.value
+      })
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Registration failed');
+    }
+
+    console.log('Registration successful:', data);
+    
+    // 注册成功后切换到登录表单并清空注册表单
+    registerName.value = ''
+    registerEmail.value = ''
+    registerPassword.value = ''
+    activeTab.value = 'login'
+    
+    // 可以显示成功消息（这里简单地使用alert）
+    alert('注册成功！请登录您的账户。')
+    
+  } catch (err: any) {
+    error.value = err.message;
+    console.error('Registration error:', err);
+  }
+}
+
 // 切换标签页
 const switchTab = (tab: string) => {
   activeTab.value = tab
+  error.value = '' // 清空错误信息
 }
 </script>
 
@@ -130,6 +176,7 @@ const switchTab = (tab: string) => {
                   <label class="flex flex-col">
                     <p class="text-[var(--text-primary)] text-sm font-medium leading-normal pb-1.5">Full Name</p>
                     <input 
+                      v-model="registerName"
                       class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[var(--text-primary)] focus:outline-0 focus:ring-0 border border-[var(--border-color)] bg-white h-12 placeholder:text-[var(--text-secondary)] p-3 text-sm font-normal" 
                       placeholder="Enter your full name" 
                       type="text"
@@ -140,6 +187,7 @@ const switchTab = (tab: string) => {
                   <label class="flex flex-col">
                     <p class="text-[var(--text-primary)] text-sm font-medium leading-normal pb-1.5">Email</p>
                     <input 
+                      v-model="registerEmail"
                       class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[var(--text-primary)] focus:outline-0 focus:ring-0 border border-[var(--border-color)] bg-white h-12 placeholder:text-[var(--text-secondary)] p-3 text-sm font-normal" 
                       placeholder="you@example.com" 
                       type="email"
@@ -150,6 +198,7 @@ const switchTab = (tab: string) => {
                   <label class="flex flex-col">
                     <p class="text-[var(--text-primary)] text-sm font-medium leading-normal pb-1.5">Password</p>
                     <input 
+                      v-model="registerPassword"
                       class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[var(--text-primary)] focus:outline-0 focus:ring-0 border border-[var(--border-color)] bg-white h-12 placeholder:text-[var(--text-secondary)] p-3 text-sm font-normal" 
                       placeholder="••••••••" 
                       type="password"
@@ -158,10 +207,14 @@ const switchTab = (tab: string) => {
                 </div>
                 <div class="pt-2">
                   <button 
+                    @click="handleRegister"
                     class="btn-primary flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 text-sm font-semibold tracking-wide"
                   >
                     <span class="truncate">Register</span>
                   </button>
+                </div>
+                <div v-if="error" class="text-red-500 text-sm text-center pt-2">
+                  {{ error }}
                 </div>
               </div>
             </div>
