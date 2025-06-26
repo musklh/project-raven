@@ -31,11 +31,11 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/generate-report',
-    name: 'GenerateReport',
-    component: () => import('../views/ReportGenerationPage.vue'),
+    path: '/account-settings',
+    name: 'AccountSettings',
+    component: () => import('../views/AccountSettingsPage.vue'),
     meta: {
-      title: 'Generate Report - 生成报表'
+      title: 'Data Insights - 账户设置'
     }
   }
 ]
