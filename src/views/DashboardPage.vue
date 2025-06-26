@@ -36,7 +36,7 @@ const fetchDashboardData = async () => {
     ]);
 
     if (!statsRes.ok || !dataSourcesRes.ok || !reportsRes.ok) {
-        throw new Error('Failed to fetch dashboard data');
+      throw new Error('Failed to fetch dashboard data');
     }
 
     stats.value = await statsRes.json();
@@ -72,7 +72,7 @@ const saveDataSource = async () => {
     dataSourceModalError.value = 'Data source name is required.';
     return;
   }
-  
+
   const isEditing = activeDataSource.id !== null;
   const url = isEditing ? `/api/dashboard/datasources/${activeDataSource.id}` : '/api/dashboard/datasources';
   const method = isEditing ? 'PUT' : 'POST';
@@ -148,7 +148,7 @@ const refreshReport = async (id: number) => {
   try {
     const response = await fetch(`/api/reports/${id}/refresh`, { method: 'POST' });
     if (!response.ok) throw new Error('Failed to start refresh.');
-    
+
     // Optimistically update the UI
     const task = reportTasks.value.find(t => t.id === id);
     if (task) {
@@ -158,7 +158,7 @@ const refreshReport = async (id: number) => {
 
     // Poll for completion
     setTimeout(() => {
-        fetchDashboardData()
+      fetchDashboardData()
     }, 3500);
 
   } catch (error) {
@@ -168,8 +168,8 @@ const refreshReport = async (id: number) => {
 }
 
 const closeReportModal = () => {
-    isReportModalOpen.value = false;
-    activeReport.value = null;
+  isReportModalOpen.value = false;
+  activeReport.value = null;
 }
 
 // 导航
@@ -247,34 +247,34 @@ const handleLogout = () => {
             <div class="overflow-x-auto rounded-lg border border-[var(--border-color)] bg-white shadow-sm">
               <table class="min-w-full divide-y divide-[var(--border-color)]">
                 <thead class="bg-slate-50">
-                  <tr>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Name</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Type</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Status</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Created</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Actions</th>
-                  </tr>
+                <tr>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Name</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Type</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Status</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Created</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Actions</th>
+                </tr>
                 </thead>
                 <tbody class="divide-y divide-[var(--border-color)] bg-white">
-                  <tr v-for="source in dataSources" :key="source.id">
-                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">{{ source.name }}</td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)] flex items-center gap-2">
-                      <span :class="['material-icons text-base', source.iconColor]">{{ source.typeIcon }}</span> {{ source.type }}
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4">
+                <tr v-for="source in dataSources" :key="source.id">
+                  <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">{{ source.name }}</td>
+                  <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)] flex items-center gap-2">
+                    <span :class="['material-icons text-base', source.iconColor]">{{ source.typeIcon }}</span> {{ source.type }}
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4">
                       <span :class="['inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', source.statusColor]">
                         <svg class="-ml-0.5 mr-1.5 h-2 w-2" :class="source.status === 'Active' ? 'text-green-400' : 'text-red-400'" fill="currentColor" viewBox="0 0 8 8">
                           <circle cx="4" cy="4" r="3"></circle>
                         </svg>
                         {{ source.status }}
                       </span>
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ source.created }}</td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                      <a @click="openEditModal(source)" class="text-[var(--primary-color)] hover:text-indigo-800 mr-3 cursor-pointer">Edit</a>
-                      <a @click="deleteDataSource(source.id)" class="text-red-600 hover:text-red-800 cursor-pointer">Delete</a>
-                    </td>
-                  </tr>
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ source.created }}</td>
+                  <td class="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                    <a @click="openEditModal(source)" class="text-[var(--primary-color)] hover:text-indigo-800 mr-3 cursor-pointer">Edit</a>
+                    <a @click="deleteDataSource(source.id)" class="text-red-600 hover:text-red-800 cursor-pointer">Delete</a>
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -286,32 +286,32 @@ const handleLogout = () => {
             <div class="overflow-x-auto rounded-lg border border-[var(--border-color)] bg-white shadow-sm">
               <table class="min-w-full divide-y divide-[var(--border-color)]">
                 <thead class="bg-slate-50">
-                  <tr>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Report Name</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Data Source</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Created</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Duration</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Status</th>
-                    <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Actions</th>
-                  </tr>
+                <tr>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Report Name</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Data Source</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Created</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Duration</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Status</th>
+                  <th class="px-6 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Actions</th>
+                </tr>
                 </thead>
                 <tbody class="divide-y divide-[var(--border-color)] bg-white">
-                  <tr v-for="task in reportTasks" :key="task.id">
-                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">{{ task.name }}</td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.dataSource }}</td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.created }}</td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.duration }}</td>
-                    <td class="whitespace-nowrap px-6 py-4">
+                <tr v-for="task in reportTasks" :key="task.id">
+                  <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--text-primary)]">{{ task.name }}</td>
+                  <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.dataSource }}</td>
+                  <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.created }}</td>
+                  <td class="whitespace-nowrap px-6 py-4 text-sm text-[var(--text-secondary)]">{{ task.duration }}</td>
+                  <td class="whitespace-nowrap px-6 py-4">
                       <span :class="['inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', task.statusColor]">
                         {{ task.status }}
                       </span>
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium flex items-center gap-2">
-                      <button @click="viewReport(task.id)" class="text-indigo-600 hover:text-indigo-800" title="View Report"><span class="material-icons text-base">visibility</span></button>
-                      <button @click="downloadReport(task)" class="text-green-600 hover:text-green-800" title="Download Report"><span class="material-icons text-base">download</span></button>
-                      <button @click="refreshReport(task.id)" class="text-blue-600 hover:text-blue-800" title="Refresh Report"><span class="material-icons text-base">refresh</span></button>
-                    </td>
-                  </tr>
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 text-sm font-medium flex items-center gap-2">
+                    <button @click="viewReport(task.id)" class="text-indigo-600 hover:text-indigo-800" title="View Report"><span class="material-icons text-base">visibility</span></button>
+                    <button @click="downloadReport(task)" class="text-green-600 hover:text-green-800" title="Download Report"><span class="material-icons text-base">download</span></button>
+                    <button @click="refreshReport(task.id)" class="text-blue-600 hover:text-blue-800" title="Refresh Report"><span class="material-icons text-base">refresh</span></button>
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -324,13 +324,13 @@ const handleLogout = () => {
     <div v-if="isDataSourceModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
       <div class="relative w-full max-w-lg rounded-xl border border-slate-200 bg-white p-8 shadow-lg">
         <h3 class="text-xl font-semibold text-slate-800 mb-6">{{ activeDataSource.id ? 'Edit' : 'Add' }} Data Source</h3>
-        
+
         <form @submit.prevent="saveDataSource" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-slate-600 mb-1" for="source-name">Name</label>
             <input v-model="activeDataSource.name" id="source-name" type="text" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5" placeholder="e.g., Q1 Sales Data">
           </div>
-          
+
           <div>
             <label class="block text-sm font-medium text-slate-600 mb-1" for="source-type">Type</label>
             <select v-model="activeDataSource.type" id="source-type" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5">
@@ -340,7 +340,7 @@ const handleLogout = () => {
             </select>
           </div>
 
-           <div>
+          <div>
             <label class="block text-sm font-medium text-slate-600 mb-1" for="source-status">Status</label>
             <select v-model="activeDataSource.status" id="source-status" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5">
               <option>Active</option>
@@ -349,7 +349,7 @@ const handleLogout = () => {
           </div>
 
           <div v-if="dataSourceModalError" class="text-sm text-red-600">{{ dataSourceModalError }}</div>
-          
+
           <div class="flex justify-end gap-4 pt-4">
             <button @click="closeDataSourceModal" type="button" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cancel</button>
             <button type="submit" class="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
@@ -360,23 +360,23 @@ const handleLogout = () => {
 
     <!-- 报告详情模态框 -->
     <div v-if="isReportModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" @click.self="closeReportModal">
-        <div class="relative w-full max-w-3xl rounded-xl bg-white shadow-lg flex flex-col" style="max-height: 90vh;">
-            <div class="flex items-center justify-between p-6 border-b border-slate-200">
-                <h3 class="text-xl font-semibold text-slate-800">{{ activeReport?.name }}</h3>
-                <button @click="closeReportModal" class="text-slate-500 hover:text-slate-800">
-                    <span class="material-icons">close</span>
-                </button>
-            </div>
-            <div class="p-6 overflow-y-auto">
-              <article class="prose prose-slate max-w-none" v-html="reportContentHtml"></article>
-            </div>
-             <div class="flex justify-end p-4 bg-slate-50 border-t border-slate-200 rounded-b-xl">
-                <button @click="downloadReport(activeReport)" class="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <span class="material-icons text-base">download</span>
-                    Download Report
-                </button>
-            </div>
+      <div class="relative w-full max-w-3xl rounded-xl bg-white shadow-lg flex flex-col" style="max-height: 90vh;">
+        <div class="flex items-center justify-between p-6 border-b border-slate-200">
+          <h3 class="text-xl font-semibold text-slate-800">{{ activeReport?.name }}</h3>
+          <button @click="closeReportModal" class="text-slate-500 hover:text-slate-800">
+            <span class="material-icons">close</span>
+          </button>
         </div>
+        <div class="p-6 overflow-y-auto">
+          <article class="prose prose-slate max-w-none" v-html="reportContentHtml"></article>
+        </div>
+        <div class="flex justify-end p-4 bg-slate-50 border-t border-slate-200 rounded-b-xl">
+          <button @click="downloadReport(activeReport)" class="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            <span class="material-icons text-base">download</span>
+            Download Report
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

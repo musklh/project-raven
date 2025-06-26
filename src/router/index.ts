@@ -29,6 +29,14 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'AI Agent Interaction - 聊天'
     }
+  },
+  {
+    path: '/generate-report',
+    name: 'GenerateReport',
+    component: () => import('../views/ReportGenerationPage.vue'),
+    meta: {
+      title: 'Generate Report - 生成报表'
+    }
   }
 ]
 
